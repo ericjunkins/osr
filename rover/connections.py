@@ -49,7 +49,6 @@ class Connections():
 		self.type = type
 
 	def _btVals(self):
-		
 		while True:
 			try:
 				sockData = self.bt_sock.recv(1024)
