@@ -37,47 +37,7 @@ class Rover():
 			return [0]*6
 		else:
 			return  self.__getVelocity(cur_rad,v)
-	#Performs all communication to the RoboClaw Motor controllers
-	def roboClawReadWrite(self):
-		rc = self.rc
-		address = self.address
-		prev, last_known = [None]*4,[None]*4
-		prev_motor = [0]*10
-		counter = [0]*4
-		pi = math.pi
-		while self.thread_kill != True:
-			enc1,enc2,enc3,enc4 = self.getScaledEnc(rc,address)
-			enc = self.encoders
-			self.getTurningRadius()
-
-			encoders = [enc1,enc2,enc3,enc4]
-			if last_known != [None,None,None,None]:
-				for i in range(4):
-					if(abs(encoders[i]-prev[i]) < 15):
-						counter[i] +=1
-					else:
-						counter[i] = 0
-					if counter[i] > 2:
-						last_known[i] = encoders[i]
-			else:
-				last_known = encoders
-			self.encoders = last_known
-			prev = encoders
-			#sends signals to spin the motors for each 10 motors
-			for i in range(10):
-				if (abs(self.__motor_speeds[i] - prev_motor[i]) > 10):
-					self.spinMotor(i,self.__motor_speeds[i])
-					prev_motor[i] = self.__motor_speeds[i]
-				#checks if a drive motor is spinning
-				if i == 4:
-					if self.__motor_speeds[i] != 0:
-						self.__linear_speed = 1
-					else:
-						self.__linear_speed = 0
-
-			time.sleep(0.01)
-		self.killMotors()
-
+			
 	def scaleCmds(self,v,r):
 
 		tmp_radius = r
@@ -213,6 +173,11 @@ class Rover():
 		for i in range(0,10):
 			self.spinMotor(i,0)
 	
+
+	def drive(v):
+		for i in range(6):
+			self.spinMotor(i,v[i])
+
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
 		#serial address of roboclaw
