@@ -10,6 +10,7 @@ import math
 import select
 import sys
 import os
+from arguments import Arguments
 
 class Threads():
 	def __init__(self):
@@ -144,12 +145,15 @@ def main():
 	myRover = rover.Rover()
 	myThreads = Threads()
 	screenSocketConnected = False
-	if (len(sys.argv) == 2):
-		if sys.argv[1] == "-t":
-			myRover.thread_kill = False
-			read_write_thread = threading.Thread(target = myRover.roboClawReadWrite, args = ())	
-			read_write_thread.start()
-			myThreads.testMode(myRover)
+	args = Arguments()
+	if args.results.test == True:
+		print "testing mode"
+		'''
+		myRover.thread_kill = False
+		read_write_thread = threading.Thread(target = myRover.roboClawReadWrite, args = ())	
+		read_write_thread.start()
+		myThreads.testMode(myRover)
+		'''
 	else:
 		while True:
 			try:

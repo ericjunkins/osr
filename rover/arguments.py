@@ -1,6 +1,6 @@
 import argparse
 
-class arguments():
+class Arguments():
 	def __init__(self):
 		parser = argparse.ArgumentParser()
 		parser.add_argument('-t', action='store_true', dest = 'test',
