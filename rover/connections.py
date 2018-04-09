@@ -50,7 +50,6 @@ class Connections():
 		try:
 			sockData = self.bt_sock.recv(1024)
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
-			#print v-100,s-100
 			self.bt_sock.send('1')
 			time.sleep(0.1)
 			return (v-100,s-100)
@@ -70,7 +69,9 @@ class Connections():
 		if self.joy.connected():
 			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
 		else:
+			print 'not connected from xbox controller'
 			return (0,0)
+			
 	def getDriveVals(self):
 		if self.type == 'b':
 			v,r = self._btVals()

@@ -16,6 +16,7 @@ from connections import Connections
 def main():
 	args = Arguments()
 	conn = Connections()
+	rover = Rover()
 	if args.results.socket == True:
 		print "starting LED socket client"
 
@@ -26,7 +27,13 @@ def main():
 	c = 0
 	while True:
 		try:
-			print "Vals are:", conn.getDriveVals(), "on c =", c
+			v,r = conn.getDriveVals()
+			print rover.getScaledEnc()
+			
+
+
+
+
 			time.sleep(0.05)
 
 		except KeyboardInterrupt:

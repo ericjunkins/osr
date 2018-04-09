@@ -32,7 +32,7 @@ class Rover():
 		
 	#Sends speed of drive motors based on input and current turning radius
 	def calculateDriveSpeed(self,speed):
-		self.__getTurningRadius()
+		self.getTurningRadius()
 		if (speed == 0):
 			for i in range(4,10):
 				self.__motor_speeds[i] = 0
@@ -50,9 +50,9 @@ class Rover():
 		counter = [0]*4
 		pi = math.pi
 		while self.thread_kill != True:
-			enc1,enc2,enc3,enc4 = self.__getScaledEnc(rc,address)
+			enc1,enc2,enc3,enc4 = self.getScaledEnc(rc,address)
 			enc = self.encoders
-			self.__getTurningRadius()
+			self.getTurningRadius()
 
 			encoders = [enc1,enc2,enc3,enc4]
 			if last_known != [None,None,None,None]:
@@ -84,7 +84,7 @@ class Rover():
 		self.killMotors()
 
 	#Gets the current approximate turning radius of the rover based on current corner angles
-	def __getTurningRadius(self):
+	def getTurningRadius(self):
 		enc = self.encoders
 		radius = 250
 		if enc[0] == None:
@@ -166,7 +166,7 @@ class Rover():
 
 	#Calculates the angle that a corner motor is at, based on the scalings for that corner
 	@staticmethod
-	def __getScaledEnc(rc,address):
+	def getScaledEnc(rc,address):
 			encoders = [0]*4
 			for i in range(4):
 				if (i % 2):
@@ -174,7 +174,6 @@ class Rover():
 				else:
 					enc = rc.ReadEncM1(address[int(math.ceil((i+1)/2.0)+2)])[1]
 				encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
-
 			return encoders
 
 	#Calculates the speed to distribute to each individual drive wheel based on geometry and turning radius
