@@ -21,14 +21,8 @@ def main():
 
 	if args.results.test == True:
 		print "starting test mode"
-	elif args.results.bluetooth == True and args.results.xbox == False:
-		conn.btConnect()
-	elif args.results.xbox == True and args.results.bluetooth == False:
-		print 'starting xbox'
-		conn.xBoxConnect()
-	elif args.results.bluetooth == True and args.results.xbox == True:
-		print "cannot start both xbox and bluetooth listeners"
-
+	elif args.results.connection == 'x' or args.results.connection == 'b':
+		conn.connect(args.results.connection)
 
 if __name__ == '__main__':
 	main()

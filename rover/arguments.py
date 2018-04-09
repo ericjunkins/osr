@@ -11,7 +11,7 @@ class Arguments():
 							default = False,
 							help='Turn on LED socket',
 							)
-		parser.add_argument('-b', action='store', dest = 'connection',
+		parser.add_argument('-c', action='store', dest = 'connection',
 							default = False,
 							help='Turn on bluetooth listener',
 							)

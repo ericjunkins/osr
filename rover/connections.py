@@ -10,7 +10,7 @@ class Connections():
 
 	def __init__(self):
 		self.type = "b"
-	
+
 	def btConnect(self):
 		server_sock = BluetoothSocket(RFCOMM)
 		server_sock.bind(("",PORT_ANY))
@@ -32,6 +32,7 @@ class Connections():
 
 	def xBoxConnect(self):
 		joy = xbox.Joystick()
+		print 'starting xbox list'
 
 		time.sleep(1)
 		joy.close()
