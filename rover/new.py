@@ -24,14 +24,17 @@ def main():
 		print "starting test mode"
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
-	c = 0
+
 	while True:
 		try:
 			v,r = conn.getDriveVals()
-			print rover.getScaledEnc()
-			
+			#encs = rover.getScaledEnc()
+			encs =[0]*4
+			cur_rad = rover.getTurningRadius(encs)
+			print cur_rad
 
 
+			#rover.calculateDriveSpeed()
 
 
 			time.sleep(0.05)

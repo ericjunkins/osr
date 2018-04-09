@@ -31,15 +31,15 @@ class Rover():
 		self.rc.ResetEncoders(self.address[2])
 		
 	#Sends speed of drive motors based on input and current turning radius
-	def calculateDriveSpeed(self,speed):
-		self.getTurningRadius()
+	def calculateDriveSpeed(self,v,cur_rad):
+		v = int(v)*(127/100)
+		motor_speeds =[0]*6
 		if (speed == 0):
-			for i in range(4,10):
-				self.__motor_speeds[i] = 0
+			for motor in motor_speeds:
+				motor = 0
 			return
-		velocity = self.__getVelocity(self.turning_radius,speed)
-		for i in range(4,10):
-			self.__motor_speeds[i] = velocity[i-4]
+		velocity = self.__getVelocity(cur_rad,v)
+		return velocity
 			
 	#Performs all communication to the RoboClaw Motor controllers
 	def roboClawReadWrite(self):
@@ -83,12 +83,23 @@ class Rover():
 			time.sleep(0.01)
 		self.killMotors()
 
+	def scaleCmds(self,v,r):
+
+		tmp_radius = r
+		#print speed,tmp_radius
+
+		if tmp_radius > 0:
+			r = 220 - tmp_radius*(250/100)
+		elif tmp_radius < 0:
+			r = -220 - tmp_radius * (250/100)
+		else:
+			r = 250
+		return v,r
+
 	#Gets the current approximate turning radius of the rover based on current corner angles
-	def getTurningRadius(self):
-		enc = self.encoders
-		radius = 250
+	def getTurningRadius(enc):
 		if enc[0] == None:
-			return radius
+			return 250
 		try:
 			if enc[0] > 0:
 				r1 = (d1/math.tan(math.radians(abs(enc[0])))) + d3
@@ -101,10 +112,9 @@ class Rover():
 				r3 = -(d2/math.tan(math.radians(abs(enc[2])))) + d3
 				r4 = -(d1/math.tan(math.radians(abs(enc[3])))) + d3
 			radius = (r1 + r2 + r3 + r4)/4
-			self.turning_radius = radius
 			return radius
 		except:
-			return radius
+			return 250
 
 	#Calculates the angles the corners need to be at given an input desired turning radius r
 	def calculateCornerAngles(self,r):
@@ -123,6 +133,7 @@ class Rover():
 			ang1,ang2,ang3,ang4 = 0,0,0,0
 
 		self.__tar_deg = [ang1,ang2,ang3,ang4]
+		return [ang1,ang2,ang3,ang4]
 
 	#Sets the desired speed for each corner motor to turn at
 	def turnCornerMotor(self):
