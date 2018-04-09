@@ -38,8 +38,6 @@ class Connections():
 		self.joy = xbox.Joystick()
 		print 'starting xbox list'
 
-		time.sleep(1)
-		self.joy.close()
 
 	def connect(self,type):
 		if type == "b":
@@ -72,6 +70,14 @@ class Connections():
 			self.bt_sock.close()
 			return (0,0)
 
+
+	def closeConnections(self):
+		if self.type == 'b':
+			self.bt_sock.send('0')
+			time.sleep(0.25)
+			self.bt_sock.close()
+		elif self.typ == 'x':
+			self.joy.close()
 
 	def _xboxVals(self):
 		if joy.connected():

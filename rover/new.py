@@ -24,14 +24,13 @@ def main():
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
 
-
-	print conn.getDriveVals()
-
-
-
-
-
-
+	while True:
+		try:
+			print conn.getDriveVals()
+			time.sleep(0.5)
+		
+		except KeyboardInterrupt:
+			conn.closeConnections()
 
 
 
