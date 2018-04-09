@@ -30,7 +30,6 @@ def main():
 			time.sleep(0.05)
 
 		except KeyboardInterrupt:
-			print "not here right?!?!"
 			conn.closeConnections()
 
 

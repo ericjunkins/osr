@@ -4,8 +4,6 @@ import time
 import xbox
 from bluetooth import *
 
-
-
 class Connections():
 
 	def __init__(self):
@@ -65,13 +63,14 @@ class Connections():
 			self.bt_sock.send('0')
 			time.sleep(0.25)
 			self.bt_sock.close()
-		elif self.typ == 'x':
+		elif self.type == 'x':
 			self.joy.close()
 
 	def _xboxVals(self):
-		if joy.connected():
-			return (joy.leftY(),joy.rightX())
-
+		if self.joy.connected():
+			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
+		else:
+			return (0,0)
 	def getDriveVals(self):
 		if self.type == 'b':
 			v,r = self._btVals()
@@ -80,4 +79,3 @@ class Connections():
 		return v,r
 
 
-	
