@@ -11,11 +11,11 @@ class Arguments():
 							default = False,
 							help='Turn on LED socket',
 							)
-		parser.add_argument('-b', action='store_true', dest = 'bluetooth',
+		parser.add_argument('-b', action='store', dest = 'connection',
 							default = False,
 							help='Turn on bluetooth listener',
 							)
-		parser.add_argument('-x', action='store_true', dest = 'xbox',
+		parser.add_argument('-x', action='store', dest = 'connection',
 							default = False,
 							help='Turn on xbox listener',
 							)

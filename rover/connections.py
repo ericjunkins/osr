@@ -7,6 +7,9 @@ from bluetooth import *
 
 
 class Connections():
+
+	def __init__(self):
+		self.type = "b"
 	
 	def btConnect(self):
 		server_sock = BluetoothSocket(RFCOMM)
@@ -28,8 +31,18 @@ class Connections():
 		self.bt_sock = client_socket
 
 	def xBoxConnect(self):
-		print "opening Xbox Joystick"
 		joy = xbox.Joystick()
 
 		time.sleep(1)
 		joy.close()
+
+	def connect(self,type):
+		if type == "b":
+			self.btConnect()
+		elif type == "x":
+			self.xBoxConnect()
+		else:
+			return -1
+		self.type = type
+
+	
