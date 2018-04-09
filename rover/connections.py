@@ -49,15 +49,14 @@ class Connections():
 		self.type = type
 
 	def _btVals(self):
-		while True:
-			try:
-				sockData = self.bt_sock.recv(1024)
-				v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
-				print v-100,s-100
-				time.sleep(0.1)
-				self.bt_sock.send('1')
-			except KeyboardInterrupt:
-				print "exiting btvals"
+		try:
+			sockData = self.bt_sock.recv(1024)
+			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
+			print v-100,s-100
+			self.bt_sock.send('1')
+			time.sleep(0.1)
+		except KeyboardInterrupt:
+			print "exiting btvals"
 
 
 	def closeConnections(self):
