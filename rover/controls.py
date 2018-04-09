@@ -147,7 +147,7 @@ class Rover():
 	def __getVelocity(r,speed):
 		if (r == 0 or r >= 250 or r <= -250):
 			#drive straight forward, all wheels move the same speed
-			return [speed] * 6
+				return [speed] * 6
 		else:
 			x = speed/(abs(r) + d4) #wheels can't move faster than max (127)
 			a = math.pow(d2,2)
@@ -174,9 +174,9 @@ class Rover():
 			self.spinMotor(i,0)
 	
 
-	def drive(v):
+	def drive(self,v):
 		for i in range(6):
-			self.spinMotor(i,v[i])
+			self.spinMotor(i+4,v[i])
 
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
