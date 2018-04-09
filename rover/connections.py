@@ -65,7 +65,7 @@ class Connections():
 					self.bt_sock.close()
 			self.bt_sock.send("1")
 		except:
-			print "exiting"
+			print " _btVals is exiting"
 			self.bt_sock.send("0")
 			time.sleep(0.25)
 			self.bt_sock.close()

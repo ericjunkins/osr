@@ -27,7 +27,7 @@ def main():
 	while True:
 		try:
 			print "Vals are:" conn.getDriveVals()
-			time.sleep(0.1)
+			time.sleep(0.05)
 		
 		except KeyboardInterrupt:
 			conn.closeConnections()
