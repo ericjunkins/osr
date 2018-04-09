@@ -49,27 +49,14 @@ class Connections():
 		self.type = type
 
 	def _btVals(self):
-		try:
-			sockData = self.bt_sock.recv(1024)
-			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
-
-			if (v ^ s is c):
-				#self.drive_speed = v-100
-				#self.turn_radius = s-100
-				return (v-100,s-100)
-				#self.screen = ord(sockData[11])
-			else:
-				print "Checksum failed!"
-				self.check +=1
-				if check > 3:
-					self.bt_sock.close()
-			self.bt_sock.send("1")
-		except:
-			print " _btVals is exiting"
-			self.bt_sock.send("0")
-			time.sleep(0.25)
-			self.bt_sock.close()
-			return (0,0)
+		
+		while True:
+			try:
+				sockData = self.bt_sock.recv(1024)
+				v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
+				print v-100,s-100
+				time.sleep(0.1)
+			except KeyboardInterrupt
 
 
 	def closeConnections(self):
