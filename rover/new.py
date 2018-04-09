@@ -24,6 +24,17 @@ def main():
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
 
+
+	print conn.getDriveVals()
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
 	main()
 
