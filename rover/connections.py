@@ -60,11 +60,12 @@ class Connections():
 				#self.screen = ord(sockData[11])
 			else:
 				print "Checksum failed!"
-				check +=1
+				self.check +=1
 				if check > 3:
 					self.bt_sock.close()
 			self.bt_sock.send("1")
 		except:
+			print "exiting"
 			self.bt_sock.send("0")
 			time.sleep(0.25)
 			self.bt_sock.close()
