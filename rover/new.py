@@ -4,7 +4,7 @@ import glob
 import time
 import RPi.GPIO as GPIO
 from bluetooth import *
-import controls as rover
+from controls import Rover
 import threading
 import math
 import select

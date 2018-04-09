@@ -165,14 +165,14 @@ class Rover():
 		return speed
 
 	#Calculates the angle that a corner motor is at, based on the scalings for that corner
-	@staticmethod
-	def getScaledEnc(rc,address):
+
+	def getScaledEnc(self):
 			encoders = [0]*4
 			for i in range(4):
 				if (i % 2):
-					enc = rc.ReadEncM2(address[int(math.ceil((i+1)/2.0)+2)])[1]
+					enc = self.rc.ReadEncM2(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
 				else:
-					enc = rc.ReadEncM1(address[int(math.ceil((i+1)/2.0)+2)])[1]
+					enc = self.rc.ReadEncM1(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
 				encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
 			return encoders
 
