@@ -23,10 +23,10 @@ def main():
 		print "starting test mode"
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
-
+	c = 0
 	while True:
 		try:
-			print "Vals are:", conn.getDriveVals()
+			print "Vals are:", conn.getDriveVals(), "on c =", c
 			time.sleep(0.05)
 
 		except KeyboardInterrupt:
