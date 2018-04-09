@@ -15,8 +15,5 @@ class Arguments():
 							default = False,
 							help='Turn on bluetooth listener',
 							)
-		parser.add_argument('-x', action='store', dest = 'connection',
-							default = False,
-							help='Turn on xbox listener',
-							)
+
 		self.results = parser.parse_args()

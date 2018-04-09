@@ -10,6 +10,9 @@ class Connections():
 
 	def __init__(self):
 		self.type = "b"
+		self.joy = None
+		self.bt_sock = None
+		self.check = 0
 
 	def btConnect(self):
 		server_sock = BluetoothSocket(RFCOMM)
@@ -29,13 +32,14 @@ class Connections():
 		client_socket.setblocking(0)
 		print "Accepted connection from ", client_info
 		self.bt_sock = client_socket
+		self.bt_sock.settimeout(1)
 
 	def xBoxConnect(self):
-		joy = xbox.Joystick()
+		self.joy = xbox.Joystick()
 		print 'starting xbox list'
 
 		time.sleep(1)
-		joy.close()
+		self.joy.close()
 
 	def connect(self,type):
 		if type == "b":
@@ -45,5 +49,40 @@ class Connections():
 		else:
 			return -1
 		self.type = type
+
+	def _btVals(self):
+		try:
+			sockData = self.bt_sock.recv(1024)
+			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
+
+			if (v ^ s is c):
+				#self.drive_speed = v-100
+				#self.turn_radius = s-100
+				return (v-100,s-100)
+				#self.screen = ord(sockData[11])
+			else:
+				print "Checksum failed!"
+				check +=1
+				if check > 3:
+					self.bt_sock.close()
+			self.bt_sock.send("1")
+		except:
+			self.bt_sock.send("0")
+			time.sleep(0.25)
+			self.bt_sock.close()
+			return (0,0)
+
+
+	def _xboxVals(self):
+		if joy.connected():
+			return (joy.leftY(),joy.rightX())
+
+	def getDriveVals(self):
+		if self.type == 'b':
+			v,r = self._btVals()
+		elif self.type == 'x':
+			v,r = self._xboxVals()
+		print v,r
+
 
 	
