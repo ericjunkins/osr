@@ -52,9 +52,10 @@ class Connections():
 		try:
 			sockData = self.bt_sock.recv(1024)
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
-			print v-100,s-100
+			#print v-100,s-100
 			self.bt_sock.send('1')
 			time.sleep(0.1)
+			return (v-100,s-100)
 		except KeyboardInterrupt:
 			print "exiting btvals"
 
