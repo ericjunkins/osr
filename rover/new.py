@@ -13,33 +13,19 @@ from arguments import Arguments
 from connections import Connections
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def main():
 	args = Arguments()
+	conn = Connections()
+	if args.results.socket == True:
+		print "starting LED socket client"
 
 	if args.results.test == True:
 		print "starting test mode"
-
 	elif args.results.bluetooth == True and args.results.xbox == False:
-		print 'starting bluetooth'
+		conn.btConnect()
 	elif args.results.xbox == True and args.results.bluetooth == False:
 		print 'starting xbox'
+		conn.xBoxConnect()
 	elif args.results.bluetooth == True and args.results.xbox == True:
 		print "cannot start both xbox and bluetooth listeners"
 
