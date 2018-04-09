@@ -29,7 +29,7 @@ class Connections():
 
 	def xBoxConnect(self):
 		print "opening Xbox Joystick"
-		joy - xbox.Joystick()
+		joy = xbox.Joystick()
 
 		time.sleep(1)
 		joy.close()
