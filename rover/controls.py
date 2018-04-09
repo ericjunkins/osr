@@ -29,18 +29,14 @@ class Rover():
 		self.rc.ResetEncoders(self.address[0])
 		self.rc.ResetEncoders(self.address[1])
 		self.rc.ResetEncoders(self.address[2])
-		
+
 	#Sends speed of drive motors based on input and current turning radius
 	def calculateDriveSpeed(self,v,cur_rad):
 		v = int(v)*(127/100)
-		motor_speeds =[0]*6
-		if (speed == 0):
-			for motor in motor_speeds:
-				motor = 0
-			return
-		velocity = self.__getVelocity(cur_rad,v)
-		return velocity
-			
+		if (v == 0):
+			return [0]*6
+		else:
+			return  self.__getVelocity(cur_rad,v)
 	#Performs all communication to the RoboClaw Motor controllers
 	def roboClawReadWrite(self):
 		rc = self.rc
@@ -67,7 +63,6 @@ class Rover():
 				last_known = encoders
 			self.encoders = last_known
 			prev = encoders
-			
 			#sends signals to spin the motors for each 10 motors
 			for i in range(10):
 				if (abs(self.__motor_speeds[i] - prev_motor[i]) > 10):
@@ -97,7 +92,7 @@ class Rover():
 		return v,r
 
 	#Gets the current approximate turning radius of the rover based on current corner angles
-	def getTurningRadius(enc):
+	def getTurningRadius(self,enc):
 		if enc[0] == None:
 			return 250
 		try:

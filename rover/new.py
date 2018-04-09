@@ -31,8 +31,7 @@ def main():
 			#encs = rover.getScaledEnc()
 			encs =[0]*4
 			cur_rad = rover.getTurningRadius(encs)
-			print cur_rad
-
+			print rover.calculateDriveSpeed(v,cur_rad)
 
 			#rover.calculateDriveSpeed()
 
