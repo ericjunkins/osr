@@ -89,7 +89,7 @@ class Connections():
 			v,r = self._btVals()
 		elif self.type == 'x':
 			v,r = self._xboxVals()
-		print v,r
+		return v,r
 
 
 	
