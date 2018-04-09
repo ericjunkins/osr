@@ -1,7 +1,7 @@
 import socket
 import os
 import time
-
+import xbox
 
 
 
@@ -26,3 +26,10 @@ class Connections():
 		client_socket.setblocking(0)
 		print "Accepted connection from ", client_info
 		self.bt_sock = client_socket
+
+	def xBoxConnect(self):
+		print "opening Xbox Joystick"
+		joy - xbox.Joystick()
+
+		time.sleep(1)
+		joy.close()

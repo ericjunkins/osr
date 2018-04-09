@@ -251,3 +251,35 @@ class Rover():
 
 		speed = abs(speed)
 		return command[motorID](addr[motorID],speed)
+
+
+	def testMode(self):
+		print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+		print "             Entering Motor Test Mode                   "
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+		print "             ** Type 'quit' to exit**                     "
+		while True:
+			sigs = raw_input("Input Drive speed and Steering amount: ")
+			if (sigs == "quit"):
+				print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+				print "             Exiting Motor Test Mode                    "
+				print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+				self.turn_radius = 0
+				time.sleep(1)
+				self.drive_speed = 0
+				print "Stopping Motors"
+				time.sleep(1)
+				myRover.killMotors()
+				myRover.thread_kill = True
+				return
+			if len(sigs.split(" ")) == 2:
+				v,s = sigs.split(" ")
+				v,s = int(v),int(s)
+				if (-100 <= v <= 100 and -100 <= s <=100):
+					self.drive_speed = v
+					self.turn_radius = s
+					#self.driveController(myRover)
+				else:
+					print "Please enter numbers between -100 and 100"
+			else:
+				print "Please enter two numbers between -100 and 100 each, seperated with a space"
