@@ -31,10 +31,11 @@ def main():
 			encs = rover.getScaledEnc()
 			#print encs
 			encs =[0]*4
-			
+
 			rover.spinCorner(rover.calculateCornerAngles(r))
 			cur_rad = rover.getTurningRadius(encs)
 			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(encs)))
+			time.sleep(0.05)
 
 		except KeyboardInterrupt:
 			rover.killMotors()
