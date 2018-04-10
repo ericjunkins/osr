@@ -83,47 +83,8 @@ class Rover():
 		else:
 			ang1,ang2,ang3,ang4 = 0,0,0,0
 
-		return [ang4,ang3,ang2,ang1]
+		return [ang1,ang2,ang3,ang4]
 
-	#Sets the desired speed for each corner motor to turn at
-	def turnCornerMotor(self):
-		while (self.encoders[0] == None or \
-				self.encoders[1] == None or \
-				self.encoders[2] == None or \
-				self.encoders[3] == None
-				):
-			time.sleep(0.01)
-		counter,last_enc,deg = 0,-999,0
-
-		for motorID in range(4):
-			#if the rover isn't moving it can't turn its' wheels, to reduce ground friction on the corners
-			if (self.__linear_speed != 0):
-				deg = self.__tar_deg[motorID]
-			enc = self.encoders[motorID]
-			last_enc = enc
-			self.__motor_speeds[motorID] = self.__calculateCornerSpeed(deg,enc,last_enc,counter)
-
-	#Calculates how fast each corner motor should turn based on how far from target it is
-	@staticmethod
-	def __calculateCornerSpeed(deg,enc,last_enc,counter):
-		#software limit of 43 deg
-		if (deg > 43): deg = 43
-		elif (deg < -43): deg = -43
-
-		if (abs(enc-deg) > 30): speed = 60
-		elif (abs(enc-deg) > 20): speed = 50
-		elif (abs(enc-deg) > 10): speed = 45
-		elif (abs(enc-deg) > 5): speed = 35
-		else: speed = 0
-
-		if (abs(last_enc - enc) < 5  and abs(enc-deg) > 10): counter+=1
-		else: counter = 0
-
-		#speed multiplier in case stalled on a physical object
-		if counter > 10: speed = min(speed + int(counter/2), 70)
-		if (enc > deg): speed = -1 * speed
-
-		return speed
 
 	#Calculates the angle that a corner motor is at, based on the scalings for that corner
 

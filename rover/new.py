@@ -33,7 +33,7 @@ def main():
 			#encs =[0]*4
 			rover.spinCorner(rover.calculateCornerAngles(r))
 			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(rover.getScaledEnc())))
-			time.sleep(0.05)
+			#time.sleep(0.05)
 
 		except KeyboardInterrupt:
 			rover.killMotors()
