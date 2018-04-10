@@ -8,11 +8,11 @@ conn = Connections()
 rover = Rover()
 
 def listener():
-	if args.socket == True:
+	if args.socket:
 		print "starting LED socket client"
 		conn.unixSockConnect()
 
-	if args.test == True:
+	if args.test:
 		print "starting test mode"
 	elif args.connect == 'x' or args.connect == 'b':
 		conn.connect(args.connect)
@@ -25,6 +25,9 @@ def main():
 		try:
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
+
+			if args.socket:
+				conn.sendUnixData()
 		except:
 			rover.killMotors()
 			conn.closeConnections()

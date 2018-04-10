@@ -11,6 +11,7 @@ class Connections():
 		self.joy = None
 		self.bt_sock = None
 		self.check = 0
+		self.led = 0
 
 	def btConnect(self):
 		server_sock = BluetoothSocket(RFCOMM)
@@ -62,6 +63,7 @@ class Connections():
 		try:
 			sockData = self.bt_sock.recv(1024)
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
+			self.led = ord(sockData[11])
 			self.bt_sock.send('1')
 			return (v-100,s-100)
 		except:
@@ -94,3 +96,5 @@ class Connections():
 		return v,r
 
 
+	def sendUnixData(self):
+		self.screen_sock.send(self.led)
