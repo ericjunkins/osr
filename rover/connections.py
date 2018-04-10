@@ -53,7 +53,21 @@ class Connections():
 
 	def _xboxVals(self):
 		if self.joy.connected():
-			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
+			if self.joy.dpadUp():
+				self.led = 0
+			elif self.joy.dpadRight():
+				self.led = 1
+			elif self.joy.dpadDown():
+				self.led = 2
+			elif self.joy.dpadLeft():
+				self.led = 3
+
+			v,r = int(self.joy.leftY()*50),int(self.joy.rightX()*50)
+			if self.joy.A():
+				v *= 2
+				r *= 2
+
+			return (v,r)
 		else:
 			return
 
