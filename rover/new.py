@@ -28,7 +28,8 @@ def main():
 	while True:
 		try:
 			v,r = conn.getDriveVals()
-			#encs = rover.getScaledEnc()
+			encs = rover.getScaledEnc()
+			print encs
 			encs =[0]*4
 			cur_rad = rover.getTurningRadius(encs)
 			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(encs)))

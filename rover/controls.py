@@ -37,7 +37,7 @@ class Rover():
 			return [0]*6
 		else:
 			return  self.__getVelocity(cur_rad,v)
-			
+
 	def scaleCmds(self,v,r):
 
 		tmp_radius = r
@@ -99,7 +99,7 @@ class Rover():
 				):
 			time.sleep(0.01)
 		counter,last_enc,deg = 0,-999,0
-		
+
 		for motorID in range(4):
 			#if the rover isn't moving it can't turn its' wheels, to reduce ground friction on the corners
 			if (self.__linear_speed != 0):
@@ -147,7 +147,7 @@ class Rover():
 	def __getVelocity(r,speed):
 		if (r == 0 or r >= 250 or r <= -250):
 			#drive straight forward, all wheels move the same speed
-			return [speed] * 6
+				return [speed] * 6
 		else:
 			x = speed/(abs(r) + d4) #wheels can't move faster than max (127)
 			a = math.pow(d2,2)
@@ -155,14 +155,15 @@ class Rover():
 			c = math.pow(abs(r) + d1,2)
 			d = math.pow(abs(r) - d1,2)
 			e = abs(r) - d4
-			
+
+
 			v1 = int(x*math.sqrt(b + d))
 			v2 = int(x*e)
 			v3 = int(x*math.sqrt(a + d))
 			v4 = int(x*math.sqrt(a + c))
 			v5 = int(speed) #fastest wheel
 			v6 = int(x*math.sqrt(b + c))
-			
+
 			if (r > 0):
 				velocity = [v1,v2,v3,v4,v5,v6]
 			elif (r < 0):
@@ -172,11 +173,11 @@ class Rover():
 	def killMotors(self):
 		for i in range(0,10):
 			self.spinMotor(i,0)
-	
 
-	def drive(v):
+
+	def drive(self,v):
 		for i in range(6):
-			self.spinMotor(i,v[i])
+			self.spinMotor(i+4,v[i])
 
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
