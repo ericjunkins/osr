@@ -11,8 +11,9 @@ def listener():
 	if args.socket == True:
 		print "starting LED socket client"
 		try:
-			conn.unixConnect():
+			conn.unixConnect()
 		except:
+			print "didn't connect to LED socket"
 			pass
 
 	if args.test == True:
