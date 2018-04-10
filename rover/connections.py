@@ -62,10 +62,9 @@ class Connections():
 			elif self.joy.dpadLeft():
 				self.led = 3
 
-			v,r = int(self.joy.leftY()*50),int(self.joy.rightX()*50)
+			v,r = int(self.joy.leftY()*50),int(self.joy.rightX()*100)
 			if self.joy.A():
 				v *= 2
-				r *= 2
 
 			return (v,r)
 		else:

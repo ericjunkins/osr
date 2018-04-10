@@ -97,7 +97,7 @@ def main():
 	while True:
 		try:
 			datagram = int(screenSock.recv(1024))
-			print datagram
+			#print datagram
 			lastdata = datagram
 		except socket.error as err:
 			if err.errno == 11:
