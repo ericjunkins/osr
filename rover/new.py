@@ -29,8 +29,9 @@ def main():
 		try:
 			v,r = conn.getDriveVals()
 			encs = rover.getScaledEnc()
-			print encs
+			#print encs
 			encs =[0]*4
+			rover.spinCorner(1,1)
 			cur_rad = rover.getTurningRadius(encs)
 			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(encs)))
 

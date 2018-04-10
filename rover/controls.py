@@ -179,6 +179,13 @@ class Rover():
 		for i in range(6):
 			self.spinMotor(i+4,v[i])
 
+
+	def spinCorner(self,motorID,position):
+		print self.rc.ReadM1PositionPID(self.address[3])
+		print self.rc.ReadM2PositionPID(self.address[3])
+		print self.rc.ReadM1PositionPID(self.address[4])
+		print self.rc.ReadM2PositionPID(self.address[4])
+
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
 		#serial address of roboclaw
