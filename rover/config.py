@@ -6,10 +6,10 @@
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #Calibration Scalings for corner motor absolute encoders
-e1_scaling = [-2E-05, 0.1054, -65.417]
-e2_scaling = [6E-06, 0.0673, -64.214]
-e3_scaling = [8E-05,-0.0644,-31.398]
-e4_scaling = [6E-05,-0.0925, -9.5823]
+e1_scaling = [1E-06, 0.0609, -58.6]
+e2_scaling = [2E-05, 0.0275, -68.668]
+e3_scaling = [3E-05,-0.0069, -47.755]
+e4_scaling = [8E-05,-0.0621, -32.147]
 
 cals = [e1_scaling,e2_scaling,e3_scaling,e4_scaling]
 
