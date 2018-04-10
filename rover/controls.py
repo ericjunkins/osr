@@ -10,17 +10,9 @@ cals = config.cals
 
 class Rover():
 	def __init__(self):
-		self.encoders = [None]*4
-		self.thread_kill = False
-		self.turning_radius = 250
-		self.is_data = False
-		self.__motor_speeds = [0]*10
-		self.__tar_deg = [0]*4
-		self.__linear_speed = 0
 		self.rc = Roboclaw("/dev/ttyS0",115200)
 		self.rc.Open()
 		self.address = [0x80,0x81,0x82,0x83,0x84]
-
 		self.rc.ResetEncoders(self.address[0])
 		self.rc.ResetEncoders(self.address[1])
 		self.rc.ResetEncoders(self.address[2])
@@ -121,7 +113,6 @@ class Rover():
 
 	def spinCorner(self, tar_enc):
 		x = [0]*4
-		#print tar_enc
 		for i in range(4):
 			a, b, c = cals[i][0], cals[i][1], cals[i][2] - tar_enc[i]
 			d = b**2-4*a*c
@@ -134,6 +125,8 @@ class Rover():
 				x2 = (-b - math.sqrt(d)) / (2 * a)
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
+				else:
+					x[i] = int(x2)          #I don't think this case can ever happen. 
 		speed, accel = 1000,2000
 		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
 		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
