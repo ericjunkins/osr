@@ -34,8 +34,7 @@ def main():
 			rover.spinCorner(rover.calculateCornerAngles(r))
 			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(rover.getScaledEnc())))
 			#time.sleep(0.05)
-
-		except KeyboardInterrupt:
+		except:
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)

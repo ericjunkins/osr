@@ -151,7 +151,7 @@ class Rover():
 				x2 = (-b - math.sqrt(d)) / (2 * a)
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
-		speed, accel = 1000,1000
+		speed, accel = 1000,2000
 		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
 		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
 		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
