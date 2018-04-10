@@ -13,35 +13,33 @@ from arguments import Arguments
 from connections import Connections
 
 
-def main():
-	args = Arguments()
-	conn = Connections()
-	rover = Rover()
+args = Arguments()
+conn = Connections()
+rover = Rover()
+
+def listener():
 	if args.results.socket == True:
 		print "starting LED socket client"
-
 	if args.results.test == True:
 		print "starting test mode"
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
 
+def main():
+	listener()
 	while True:
 		try:
 			v,r = conn.getDriveVals()
-			encs = rover.getScaledEnc()
-			#print encs
-			encs =[0]*4
-
+			#encs =[0]*4
 			rover.spinCorner(rover.calculateCornerAngles(r))
-			cur_rad = rover.getTurningRadius(encs)
-			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(encs)))
+			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(rover.getScaledEnc())))
 			time.sleep(0.05)
 
 		except KeyboardInterrupt:
 			rover.killMotors()
 			conn.closeConnections()
-
-
+			time.sleep(0.5)
+			listener()
 
 if __name__ == '__main__':
 	main()
