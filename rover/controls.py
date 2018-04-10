@@ -68,7 +68,7 @@ class Rover():
 			r = -220 - tmp_radius * (250/100)
 		else:
 			r = 250
-			
+
 		absR = abs(r)
 		if (r > 0):
 			ang1 = int(-1*math.degrees(math.atan(d1/(abs(r)+d3))))
@@ -186,8 +186,8 @@ class Rover():
 			elif d == 0:
 				x[i] = int((-b + math.sqrt(d[i])) / (2 * a))
 			else:
-				x1 = (-b + math.sqrt(d[i])) / (2 * a)
-				x2 = (-b - math.sqrt(d[i])) / (2 * a)
+				x1 = (-b + math.sqrt(d)) / (2 * a)
+				x2 = (-b - math.sqrt(d)) / (2 * a)
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
 		print 'x is:',   x
