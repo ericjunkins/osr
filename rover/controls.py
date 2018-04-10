@@ -83,7 +83,7 @@ class Rover():
 		else:
 			ang1,ang2,ang3,ang4 = 0,0,0,0
 
-		return [ang1,ang2,ang3,ang4]
+		return [ang4,ang3,ang2,ang1]
 
 	#Sets the desired speed for each corner motor to turn at
 	def turnCornerMotor(self):
@@ -177,7 +177,7 @@ class Rover():
 
 	def spinCorner(self, tar_enc):
 		x = [0]*4
-
+		print tar_enc
 		for i in range(4):
 			a, b, c = cals[i][0], cals[i][1], cals[i][2] - tar_enc[i]
 			d = b**2-4*a*c
@@ -190,9 +190,7 @@ class Rover():
 				x2 = (-b - math.sqrt(d)) / (2 * a)
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
-		print 'x is:',   x
-		speed, accel = 500,500
-	
+		speed, accel = 1000,1000
 		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
 		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
 		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
