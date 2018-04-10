@@ -1,17 +1,7 @@
-import os
-import socket
-import glob
 import time
-import RPi.GPIO as GPIO
-from bluetooth import *
 from controls import Rover
-import threading
-import math
-import select
-import sys
 from arguments import Arguments
 from connections import Connections
-
 
 args = Arguments()
 conn = Connections()
@@ -24,13 +14,14 @@ def listener():
 		print "starting test mode"
 	elif args.results.connection == 'x' or args.results.connection == 'b':
 		conn.connect(args.results.connection)
+	else:
+		conn.connect('b')
 
 def main():
 	listener()
 	while True:
 		try:
-			v,r = conn.getDriveVals()
-			rover.drive(v,r)
+			rover.drive(conn.getDriveVals())
 		except:
 			rover.killMotors()
 			conn.closeConnections()

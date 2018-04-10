@@ -52,8 +52,8 @@ class Connections():
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
 			self.bt_sock.send('1')
 			return (v-100,s-100)
-		except KeyboardInterrupt:
-			print "exiting btvals"
+		except:
+			pass
 
 
 	def closeConnections(self):
