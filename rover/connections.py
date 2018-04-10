@@ -32,6 +32,15 @@ class Connections():
 		self.bt_sock = client_socket
 		self.bt_sock.settimeout(1)
 
+	def unixSockConnect(self,myRover):
+		if os.path.exists("/tmp/screen_socket") :
+			client = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
+			client.connect("/tmp/screen_socket")
+			self.screen_sock = client
+			print "connected to socket"
+		else:
+			print "Couldn't connect to LED socket"
+
 	def xBoxConnect(self):
 		self.joy = xbox.Joystick()
 		print 'Waiting on Xbox connect'
