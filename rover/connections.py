@@ -97,4 +97,4 @@ class Connections():
 
 
 	def sendUnixData(self):
-		self.screen_sock.send(self.led)
+		self.screen_sock.send(str(self.led))
