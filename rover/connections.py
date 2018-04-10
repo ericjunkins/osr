@@ -58,9 +58,12 @@ class Connections():
 
 	def closeConnections(self):
 		if self.type == 'b':
-			self.bt_sock.send('0')
-			time.sleep(0.25)
-			self.bt_sock.close()
+			try:
+				self.bt_sock.send('0')
+				time.sleep(0.25)
+				self.bt_sock.close()
+			except:
+				pass		
 		elif self.type == 'x':
 			self.joy.close()
 
