@@ -12,7 +12,6 @@ def listener():
 		print "starting LED socket client"
 		conn.unixConnect():
 
-
 	if args.test == True:
 		print "starting test mode"
 	elif args.connect == 'x' or args.connect == 'b':
