@@ -83,7 +83,7 @@ class Rover():
 		else:
 			ang1,ang2,ang3,ang4 = 0,0,0,0
 
-		return [ang1,ang2,ang3,ang4]
+		return [ang2,ang1,ang4,ang3]
 
 
 	#Calculates the angle that a corner motor is at, based on the scalings for that corner
