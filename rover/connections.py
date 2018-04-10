@@ -12,8 +12,9 @@ class Connections():
 		self.bt_sock = None
 		self.check = 0
 		self.led = 0
+		self.screen_sock = None
 
-	def btConnect(self):
+	def _btConnect(self):
 		server_sock = BluetoothSocket(RFCOMM)
 		server_sock.bind(("",PORT_ANY))
 		server_sock.listen(1)
@@ -33,6 +34,29 @@ class Connections():
 		self.bt_sock = client_socket
 		self.bt_sock.settimeout(1)
 
+	def _xBoxConnect(self):
+		self.joy = xbox.Joystick()
+		print 'Waiting on Xbox connect'
+		while not self.joy.connected():
+			time.sleep(1)
+		print 'Accepted connection from  Xbox controller', self.joy.connected()
+
+	def _btVals(self):		
+		try:
+			sockData = self.bt_sock.recv(1024)
+			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
+			self.led = ord(sockData[11])
+			self.bt_sock.send('1')
+			return (v-100,s-100)
+		except:
+			pass
+
+	def _xboxVals(self):
+		if self.joy.connected():
+			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
+		else:
+			return
+
 	def unixSockConnect(self):
 		if os.path.exists("/tmp/screen_socket") :
 			client = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
@@ -42,32 +66,25 @@ class Connections():
 		else:
 			print "Couldn't connect to LED socket"
 
-	def xBoxConnect(self):
-		self.joy = xbox.Joystick()
-		print 'Waiting on Xbox connect'
-		while not self.joy.connected():
-			time.sleep(1)
-		print 'Accepted connection from  Xbox controller', self.joy.connected()
-
-
 	def connect(self,type):
 		if type == "b":
-			self.btConnect()
+			self._btConnect()
 		elif type == "x":
-			self.xBoxConnect()
+			self._xBoxConnect()
 		else:
 			return -1
 		self.type = type
 
-	def _btVals(self):
-		try:
-			sockData = self.bt_sock.recv(1024)
-			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
-			self.led = ord(sockData[11])
-			self.bt_sock.send('1')
-			return (v-100,s-100)
-		except:
-			pass
+	def getDriveVals(self):
+		if self.type == 'b':
+			v,r = self._btVals()
+		elif self.type == 'x':
+			v,r = self._xboxVals()
+		return v,r
+
+
+	def sendUnixData(self):
+		self.screen_sock.send(str(self.led))
 
 
 	def closeConnections(self):
@@ -81,20 +98,5 @@ class Connections():
 		elif self.type == 'x':
 			self.joy.close()
 
-	def _xboxVals(self):
-		if self.joy.connected():
-			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
-		else:
-			return
-
-
-	def getDriveVals(self):
-		if self.type == 'b':
-			v,r = self._btVals()
-		elif self.type == 'x':
-			v,r = self._xboxVals()
-		return v,r
-
-
-	def sendUnixData(self):
-		self.screen_sock.send(str(self.led))
+		if self.screen_sock != None
+			self.screen_sock.close()
