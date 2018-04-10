@@ -8,14 +8,15 @@ conn = Connections()
 rover = Rover()
 
 def listener():
-	if args.results.socket == True:
+	if args.socket == True:
 		print "starting LED socket client"
-	if args.results.test == True:
+	if args.test == True:
 		print "starting test mode"
-	elif args.results.connection == 'x' or args.results.connection == 'b':
+	elif args.connect == 'x' or args.connect == 'b':
 		conn.connect(args.results.connection)
 	else:
 		conn.connect('b')
+		conn.type = 'b'
 
 def main():
 	listener()

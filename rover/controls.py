@@ -3,14 +3,9 @@ import time
 import serial
 import math
 from roboclaw import Roboclaw
-import threading
 import config
 
-d1 = config.d1
-d2 = config.d2
-d3 = config.d3
-d4 = config.d4
-
+d1,d2,d3,d4 = config.d1,config.d2,config.d3,config.d4
 cals = config.cals
 
 class Rover():
@@ -31,7 +26,6 @@ class Rover():
 		self.rc.ResetEncoders(self.address[2])
 
 
-	#Calculates the angle that a corner motor is at, based on the scalings for that corner
 	def getScaledEnc(self):
 			encoders = [0]*4
 			for i in range(4):
@@ -42,7 +36,6 @@ class Rover():
 				encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
 			return encoders
 
-	#Gets the current approximate turning radius of the rover based on current corner angles
 	def getTurningRadius(self,enc):
 		if enc[0] == None:
 			return 250
@@ -62,7 +55,6 @@ class Rover():
 		except:
 			return 250
 
-	#Calculates the angles the corners need to be at given an input desired turning radius r
 	def calculateCornerAngles(self,r):
 		tmp_radius = r
 		if tmp_radius > 0:
@@ -95,7 +87,6 @@ class Rover():
 		else:
 			return  self.__getVelocity(cur_rad,v)
 
-	#Calculates the speed to distribute to each individual drive wheel based on geometry and turning radius
 	@staticmethod
 	def __getVelocity(r,speed):
 		if (r == 0 or r >= 250 or r <= -250):
@@ -122,7 +113,7 @@ class Rover():
 			elif (r < 0):
 				velocity = [v6,v5,v4,v3,v2,v1]
 			return velocity
-	#Sets the speed of all 10 motors to 0
+
 	def killMotors(self):
 		for i in range(0,10):
 			self.spinMotor(i,0)
@@ -150,7 +141,6 @@ class Rover():
 		self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
 
 
-	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
 		#serial address of roboclaw
 		address = self.address
@@ -200,34 +190,3 @@ class Rover():
 		self.spinCorner(self.calculateCornerAngles(r))
 		for i in range(6):
 			self.spinMotor(i+4,velocity[i])
-
-	def testMode(self):
-		print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-		print "             Entering Motor Test Mode                   "
-		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-		print "             ** Type 'quit' to exit**                     "
-		while True:
-			sigs = raw_input("Input Drive speed and Steering amount: ")
-			if (sigs == "quit"):
-				print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-				print "             Exiting Motor Test Mode                    "
-				print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-				self.turn_radius = 0
-				time.sleep(1)
-				self.drive_speed = 0
-				print "Stopping Motors"
-				time.sleep(1)
-				myRover.killMotors()
-				myRover.thread_kill = True
-				return
-			if len(sigs.split(" ")) == 2:
-				v,s = sigs.split(" ")
-				v,s = int(v),int(s)
-				if (-100 <= v <= 100 and -100 <= s <=100):
-					self.drive_speed = v
-					self.turn_radius = s
-					#self.driveController(myRover)
-				else:
-					print "Please enter numbers between -100 and 100"
-			else:
-				print "Please enter two numbers between -100 and 100 each, seperated with a space"
