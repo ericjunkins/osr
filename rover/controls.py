@@ -30,14 +30,17 @@ class Rover():
 		self.rc.ResetEncoders(self.address[1])
 		self.rc.ResetEncoders(self.address[2])
 
-	#Sends speed of drive motors based on input and current turning radius
-	def calculateDriveSpeed(self,v,cur_rad):
-		v = int(v)*(127/100)
-		if (v == 0):
-			return [0]*6
-		else:
-			return  self.__getVelocity(cur_rad,v)
 
+	#Calculates the angle that a corner motor is at, based on the scalings for that corner
+	def getScaledEnc(self):
+			encoders = [0]*4
+			for i in range(4):
+				if (i % 2):
+					enc = self.rc.ReadEncM2(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
+				else:
+					enc = self.rc.ReadEncM1(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
+				encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
+			return encoders
 
 	#Gets the current approximate turning radius of the rover based on current corner angles
 	def getTurningRadius(self,enc):
@@ -85,18 +88,12 @@ class Rover():
 
 		return [ang2,ang1,ang4,ang3]
 
-
-	#Calculates the angle that a corner motor is at, based on the scalings for that corner
-
-	def getScaledEnc(self):
-			encoders = [0]*4
-			for i in range(4):
-				if (i % 2):
-					enc = self.rc.ReadEncM2(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
-				else:
-					enc = self.rc.ReadEncM1(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
-				encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
-			return encoders
+	def calculateDriveSpeed(self,v,cur_rad):
+		v = int(v)*(127/100)
+		if (v == 0):
+			return [0]*6
+		else:
+			return  self.__getVelocity(cur_rad,v)
 
 	#Calculates the speed to distribute to each individual drive wheel based on geometry and turning radius
 	@staticmethod
@@ -129,11 +126,6 @@ class Rover():
 	def killMotors(self):
 		for i in range(0,10):
 			self.spinMotor(i,0)
-
-
-	def drive(self,v):
-		for i in range(6):
-			self.spinMotor(i+4,v[i])
 
 
 	def spinCorner(self, tar_enc):
@@ -202,6 +194,12 @@ class Rover():
 		speed = abs(speed)
 		return command[motorID](addr[motorID],speed)
 
+	def drive(self,v,r):
+		current_radius = self.getTurningRadius(self.getScaledEnc())
+		velocity = self.calculateDriveSpeed(v, current_radius)
+		self.spinCorner(self.calculateCornerAngles(r))
+		for i in range(6):
+			self.spinMotor(i+4,velocity[i])
 
 	def testMode(self):
 		print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

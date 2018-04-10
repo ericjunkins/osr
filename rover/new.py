@@ -30,10 +30,7 @@ def main():
 	while True:
 		try:
 			v,r = conn.getDriveVals()
-			#encs =[0]*4
-			rover.spinCorner(rover.calculateCornerAngles(r))
-			rover.drive(rover.calculateDriveSpeed(v,rover.getTurningRadius(rover.getScaledEnc())))
-			#time.sleep(0.05)
+			rover.drive(v,r)
 		except:
 			rover.killMotors()
 			conn.closeConnections()
