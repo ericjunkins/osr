@@ -181,10 +181,6 @@ class Rover():
 
 
 	def spinCorner(self, tar_enc):
-		#print self.rc.ReadM1PositionPID(self.address[3])
-		#print self.rc.ReadM2PositionPID(self.address[3])
-		#print self.rc.ReadM1PositionPID(self.address[4])
-		#print self.rc.ReadM2PositionPID(self.address[4])
 		d = [0]*4
 		x = [0]*4
 		for i in range(4):
@@ -202,6 +198,10 @@ class Rover():
 		speed = 500
 		accel = 500
 		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
+		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
+		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
+		self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
+
 
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):
