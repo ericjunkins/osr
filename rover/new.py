@@ -13,16 +13,16 @@ def listener():
 	if args.test == True:
 		print "starting test mode"
 	elif args.connect == 'x' or args.connect == 'b':
-		conn.connect(args.results.connection)
+		conn.connect(args.connect)
 	else:
 		conn.connect('b')
-		conn.type = 'b'
 
 def main():
 	listener()
 	while True:
 		try:
-			rover.drive(conn.getDriveVals())
+			v,r = conn.getDriveVals()
+			rover.drive(v,r)
 		except:
 			rover.killMotors()
 			conn.closeConnections()

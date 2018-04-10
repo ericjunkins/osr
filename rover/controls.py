@@ -121,7 +121,7 @@ class Rover():
 
 	def spinCorner(self, tar_enc):
 		x = [0]*4
-		print tar_enc
+		#print tar_enc
 		for i in range(4):
 			a, b, c = cals[i][0], cals[i][1], cals[i][2] - tar_enc[i]
 			d = b**2-4*a*c

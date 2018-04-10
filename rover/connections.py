@@ -34,7 +34,10 @@ class Connections():
 
 	def xBoxConnect(self):
 		self.joy = xbox.Joystick()
-		print 'starting xbox list'
+		print 'Waiting on Xbox connect'
+		while not self.joy.connected():
+			time.sleep(1)
+		print 'Accepted connection from  Xbox controller', self.joy.connected()
 
 
 	def connect(self,type):
@@ -63,7 +66,7 @@ class Connections():
 				time.sleep(0.25)
 				self.bt_sock.close()
 			except:
-				pass		
+				pass
 		elif self.type == 'x':
 			self.joy.close()
 
@@ -71,8 +74,8 @@ class Connections():
 		if self.joy.connected():
 			return (int(self.joy.leftY()*100),int(self.joy.rightX()*100))
 		else:
-			print 'not connected from xbox controller'
-			return (0,0)
+			return
+
 
 	def getDriveVals(self):
 		if self.type == 'b':
