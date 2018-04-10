@@ -193,7 +193,7 @@ class Rover():
 				print 'no soln'
 			elif d == 0:
 				x[i] = (-b + math.sqrt(d[i])) / (2 * a)
-		print 'd is:', d[i], 'and x is:',  x[i]
+		print 'd is:', d, 'and x is:',  x
 
 
 	#Wrapper function to spin each motor with an easier method call
