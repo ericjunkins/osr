@@ -15,8 +15,7 @@ class Arguments():
 							default = False,
 							help='Turn on bluetooth listener',
 							)
-
-		self.results = parser.parse_args()
+		
 		self.connect = parser.parse_args().connection
 		self.socket = parser.parse_args().socket
 		self.test = parser.parse_args().test
