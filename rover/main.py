@@ -26,14 +26,15 @@ def main():
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
 
-			if args.socket:
-				conn.sendUnixData()
+
 		except:
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)
 			listener()
-
+			
+		if args.socket:
+			conn.sendUnixData()
 if __name__ == '__main__':
 	main()
 
