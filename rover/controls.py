@@ -38,18 +38,6 @@ class Rover():
 		else:
 			return  self.__getVelocity(cur_rad,v)
 
-	def scaleCmds(self,v,r):
-
-		tmp_radius = r
-		#print speed,tmp_radius
-
-		if tmp_radius > 0:
-			r = 220 - tmp_radius*(250/100)
-		elif tmp_radius < 0:
-			r = -220 - tmp_radius * (250/100)
-		else:
-			r = 250
-		return v,r
 
 	#Gets the current approximate turning radius of the rover based on current corner angles
 	def getTurningRadius(self,enc):
@@ -73,6 +61,14 @@ class Rover():
 
 	#Calculates the angles the corners need to be at given an input desired turning radius r
 	def calculateCornerAngles(self,r):
+		tmp_radius = r
+		if tmp_radius > 0:
+			r = 220 - tmp_radius*(250/100)
+		elif tmp_radius < 0:
+			r = -220 - tmp_radius * (250/100)
+		else:
+			r = 250
+			
 		absR = abs(r)
 		if (r > 0):
 			ang1 = int(-1*math.degrees(math.atan(d1/(abs(r)+d3))))
@@ -87,7 +83,6 @@ class Rover():
 		else:
 			ang1,ang2,ang3,ang4 = 0,0,0,0
 
-		self.__tar_deg = [ang1,ang2,ang3,ang4]
 		return [ang1,ang2,ang3,ang4]
 
 	#Sets the desired speed for each corner motor to turn at
@@ -181,22 +176,23 @@ class Rover():
 
 
 	def spinCorner(self, tar_enc):
-		d = [0]*4
 		x = [0]*4
+
 		for i in range(4):
-			d[i] = cals[i][1]**2-4*cals[i][0]*cals[i][2]
-			if d[i] < 0:
+			a, b, c = cals[i][0], cals[i][1], cals[i][2] - tar_enc[i]
+			d = b**2-4*a*c
+			if d < 0:
 				print 'no soln'
 			elif d == 0:
-				x[i] = int((-cals[i][1] + math.sqrt(d[i])) / (2 * cals[i][0]))
+				x[i] = int((-b + math.sqrt(d[i])) / (2 * a))
 			else:
-				x1 = (-cals[i][1] + math.sqrt(d[i])) / (2 * cals[i][0])
-				x2 = (-cals[i][1] - math.sqrt(d[i])) / (2 * cals[i][0])
+				x1 = (-b + math.sqrt(d[i])) / (2 * a)
+				x2 = (-b - math.sqrt(d[i])) / (2 * a)
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
 		print 'x is:',   x
-		speed = 500
-		accel = 500
+		speed, accel = 500,500
+	
 		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
 		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
 		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
