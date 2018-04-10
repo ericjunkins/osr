@@ -192,13 +192,16 @@ class Rover():
 			if d[i] < 0:
 				print 'no soln'
 			elif d == 0:
-				x[i] = (-b + math.sqrt(d[i])) / (2 * a)
+				x[i] = int((-cals[i][1] + math.sqrt(d[i])) / (2 * cals[i][0]))
 			else:
-				x1 = (-b + math.sqrt(d[i])) / (2 * a)
-				x2 = (-b - math.sqrt(d[i])) / (2 * a)
-				print 'the 2 solns are:', x1,x2
-		#print 'x is:',   x
-
+				x1 = (-cals[i][1] + math.sqrt(d[i])) / (2 * cals[i][0])
+				x2 = (-cals[i][1] - math.sqrt(d[i])) / (2 * cals[i][0])
+				if x1 > 0 and x2 <=0:
+					x[i] = int(x1)
+		print 'x is:',   x
+		speed = 500
+		accel = 500
+		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
 
 	#Wrapper function to spin each motor with an easier method call
 	def spinMotor(self, motorID, speed):

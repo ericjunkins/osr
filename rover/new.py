@@ -38,6 +38,7 @@ def main():
 			time.sleep(0.05)
 
 		except KeyboardInterrupt:
+			rover.killMotors()
 			conn.closeConnections()
 
 
