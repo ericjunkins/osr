@@ -100,9 +100,9 @@ class Rover():
 			v5 = int(speed) #fastest wheel
 			v6 = int(x*math.sqrt(b + c))
 
-			if (r > 0):
+			if (r < 0):
 				velocity = [v1,v2,v3,v4,v5,v6]
-			elif (r < 0):
+			elif (r > 0):
 				velocity = [v6,v5,v4,v3,v2,v1]
 			return velocity
 
