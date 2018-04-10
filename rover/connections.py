@@ -41,7 +41,7 @@ class Connections():
 			time.sleep(1)
 		print 'Accepted connection from  Xbox controller', self.joy.connected()
 
-	def _btVals(self):		
+	def _btVals(self):
 		try:
 			sockData = self.bt_sock.recv(1024)
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
@@ -98,5 +98,5 @@ class Connections():
 		elif self.type == 'x':
 			self.joy.close()
 
-		if self.screen_sock != None
+		if self.screen_sock != None:
 			self.screen_sock.close()
