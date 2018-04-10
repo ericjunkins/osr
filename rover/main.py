@@ -10,10 +10,8 @@ rover = Rover()
 def listener():
 	if args.socket == True:
 		print "starting LED socket client"
-		try:
-			conn.unixConnect():
-		except:
-			pass
+		conn.unixConnect():
+
 
 	if args.test == True:
 		print "starting test mode"
