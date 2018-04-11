@@ -1,11 +1,16 @@
 import socket
 import os
 import time
-import xbox
-from bluetooth import *
+
+
+
 
 class Connections():
+	'''
+	Sets up all the connections for running the rover, from a bluetooth app, xbox controller, and a unix socket for
+	communication to thread running the LED screen
 
+	'''
 	def __init__(self):
 		self.type = "b"
 		self.joy = None
@@ -15,6 +20,10 @@ class Connections():
 		self.screen_sock = None
 
 	def _btConnect(self):
+		from bluetooth import *
+		'''
+		Initializes the server side for bluetooth communication, with a timeout of 1 second between data from the app
+		'''
 		server_sock = BluetoothSocket(RFCOMM)
 		server_sock.bind(("",PORT_ANY))
 		server_sock.listen(1)
@@ -35,6 +44,10 @@ class Connections():
 		self.bt_sock.settimeout(1)
 
 	def _xBoxConnect(self):
+		import xbox
+		'''
+		Initializes a listener for the Xbox controller
+		'''
 		self.joy = xbox.Joystick()
 		print 'Waiting on Xbox connect'
 		while not self.joy.connected():
@@ -42,6 +55,15 @@ class Connections():
 		print 'Accepted connection from  Xbox controller', self.joy.connected()
 
 	def _btVals(self):
+		'''
+		Parses values from the bluetooth app as drive, turning, and LED screen commands
+		these values should be:
+
+		v: [-100,100]
+		r: [-100,100]
+		led: [0-3]
+
+		'''
 		try:
 			sockData = self.bt_sock.recv(1024)
 			v,s,c = ord(sockData[3]),ord(sockData[7]),ord(sockData[-1])
@@ -52,6 +74,12 @@ class Connections():
 			pass
 
 	def _xboxVals(self):
+		'''
+		Parses values from the Xbox controller. By default the speed is halved, and the "A" button
+		is used as a boost button. The D-pad controls the LED screen
+
+		'''
+
 		if self.joy.connected():
 			if self.joy.dpadUp():
 				self.led = 0
@@ -71,6 +99,11 @@ class Connections():
 			return
 
 	def unixSockConnect(self):
+		'''
+		Connects to a unix socket from the process running the LED screen, which expects
+		values of strings [0-3]
+
+		'''
 		if os.path.exists("/tmp/screen_socket") :
 			client = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
 			client.connect("/tmp/screen_socket")
@@ -80,6 +113,13 @@ class Connections():
 			print "Couldn't connect to LED socket"
 
 	def connect(self,type):
+		'''
+		Connects to a controller based on what type it is told from command line arg
+
+		:param str type: The tpye of controller being connected, b (default) for 
+							bluetooth app and x for xbox controller 
+
+		'''
 		if type == "b":
 			self._btConnect()
 		elif type == "x":
@@ -89,6 +129,10 @@ class Connections():
 		self.type = type
 
 	def getDriveVals(self):
+		'''
+		Returns the driving values based on which controller is connected
+		'''
+
 		if self.type == 'b':
 			v,r = self._btVals()
 		elif self.type == 'x':
@@ -97,10 +141,17 @@ class Connections():
 
 
 	def sendUnixData(self):
+		'''
+		Sends the LED screen process commands for the face over unix socket
+		'''
 		self.screen_sock.send(str(self.led))
 
 
 	def closeConnections(self):
+		'''
+		Closes all the connections opened by the Rover
+		'''
+
 		if self.type == 'b':
 			try:
 				self.bt_sock.send('0')

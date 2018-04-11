@@ -8,10 +8,12 @@ conn = Connections()
 rover = Rover()
 
 def listener():
+	'''
+	Based on command line args decides which controller and sockets to open
+	'''
 	if args.socket:
 		print "starting LED socket client"
 		conn.unixSockConnect()
-
 	if args.test:
 		print "starting test mode"
 	elif args.connect == 'x' or args.connect == 'b':
@@ -37,7 +39,7 @@ def main():
 				conn.sendUnixData()
 			except Exception as e:
 				print e
-	
+
 if __name__ == '__main__':
 	main()
 

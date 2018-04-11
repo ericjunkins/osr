@@ -32,7 +32,7 @@ class Rover():
 		self.rc.ResetEncoders(self.address[2])
 
 
-	def getScaledEnc(self):
+	def getCornerDeg(self):
 		'''
 		Returns a list of angles [Deg] that each of the Corners are currently pointed at
 		'''
@@ -48,7 +48,7 @@ class Rover():
 		return encoders
 
 	@staticmethod
-	def getTurningRadius(enc):
+	def approxTurningRadius(enc):
 		'''
 		Takes the list of current corner angles and approximates the current turning radius [inches]
 
@@ -74,7 +74,7 @@ class Rover():
 			return 250
 
 	@staticmethod
-	def getTarAng(radius):
+	def calTargetDeg(radius):
 		'''
 		Takes a turning radius and calculates what angle [degrees] each corner should be at
 
@@ -106,7 +106,7 @@ class Rover():
 		return [ang2,ang1,ang4,ang3]
 
 	@staticmethod
-	def getVelocity(v,r):
+	def calVelocity(v,r):
 		'''
 		Returns a list of speeds for each individual drive motor based on current turning radius
 
@@ -143,7 +143,7 @@ class Rover():
 				velocity = [v6,v5,v4,v3,v2,v1]
 			return velocity
 
-	def spinCorner(self, tar_enc):
+	def cornerPosControl(self, tar_enc):
 		'''
 		Takes the target angle and gets what encoder tick that value is for position control
 
@@ -176,7 +176,7 @@ class Rover():
 				self.rc.SpeedAccelDeccelPositionM1(self.address[index],accel,speed,accel,x[i],1)
 
 
-	def spinMotor(self, motorID, speed):
+	def motorDuty(self, motorID, speed):
 		'''
 		Wrapper method for an easier interface to control the motors
 
@@ -233,11 +233,11 @@ class Rover():
 		:param int r: driving turning radius command, % based from -100 (left) to 100 (right)
 
 		'''
-		current_radius = self.getTurningRadius(self.getScaledEnc())
-		velocity = self.getVelocity(v, current_radius)
-		self.spinCorner(self.getTarAng(r))
+		current_radius = self.approxTurningRadius(self.getCornerDeg())
+		velocity = self.calVelocity(v, current_radius)
+		self.cornerPosControl(self.calTargetDeg(r))
 		for i in range(6):
-			self.spinMotor(i+4,velocity[i])
+			self.motorDuty(i+4,velocity[i])
 
 
 	def killMotors(self):
@@ -245,4 +245,4 @@ class Rover():
 		Stops all motors on Rover
 		'''
 		for i in range(0,10):
-			self.spinMotor(i,0)
+			self.motorDuty(i,0)
