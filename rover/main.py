@@ -47,7 +47,7 @@ def main():
 			rover.drive(v,r)
 
 		except Exception as e:
-			#print e
+			print e
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)
