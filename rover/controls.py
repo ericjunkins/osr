@@ -23,7 +23,6 @@ class Rover():
 		'''
 		Initialization of communication parameters for the Motor Controllers
 		'''
-
 		self.rc = Roboclaw("/dev/ttyS0",115200)
 		self.rc.Open()
 		self.address = [0x80,0x81,0x82,0x83,0x84]
