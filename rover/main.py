@@ -3,12 +3,7 @@ from controls import Rover
 from arguments import Arguments
 from connections import Connections
 
-args = Arguments()
-conn = Connections()
-rover = Rover()
-
 '''
-
 This code runs the JPL Open Source Rover. It accepts a few command line arguments for different functionality
    -t : Testing mode - allows you to test commands to send to the rover emulating a signals from a controller
    -s : Attempts to connect to a Unix socket for controlling the LED screen. The screen.py script must be running
@@ -19,10 +14,10 @@ This code runs the JPL Open Source Rover. It accepts a few command line argument
 
 An example line running this script to run the LED screen and with an Xbox controller
 	sudo python main.py -s -c x
-
 '''
-
-
+args = Arguments()
+conn = Connections()
+rover = Rover()
 
 def listener():
 	'''
