@@ -143,6 +143,7 @@ class Rover():
 
 		:param list [int] tar_enc: List of target angles in degrees for each corner
 		'''
+
 		x = [0]*4
 		for i in range(4):
 			a, b, c = cals[i][0], cals[i][1], cals[i][2] - tar_enc[i]
@@ -161,7 +162,6 @@ class Rover():
 
 		speed, accel = 1000,2000            #These values could potentially need tuning still
 
-
 		for i in range(4):
 			index = int(math.ceil((i+1)/2.0)+2)
                         if (i % 2):
@@ -169,11 +169,6 @@ class Rover():
                         else:
 				self.rc.SpeedAccelDeccelPositionM1(self.address[index],accel,speed,accel,x[i],1)
 
-
-		#self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
-		#self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
-		#self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
-		#self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
 
 	def motorDuty(self, motorID, speed):
 		'''

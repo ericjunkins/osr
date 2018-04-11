@@ -23,11 +23,10 @@ def listener():
 	'''
 	Based on command line args decides which controller and sockets to open
 	'''
+
 	if args.socket:
 		print "starting LED socket client"
 		conn.unixSockConnect()
-	if args.test:
-		print "starting test mode"
 	elif args.connect == 'x' or args.connect == 'b':
 		conn.connect(args.connect)
 	else:
@@ -35,14 +34,12 @@ def listener():
 
 def main():
 	listener()
-	c = 0
 	while True:
 		try:
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
 
 		except Exception as e:
-			print e
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)
@@ -51,8 +48,8 @@ def main():
 		if args.socket:
 			try:
 				conn.sendUnixData()
-			except Exception as e:
-				print e
+			except:
+				pass
 
 if __name__ == '__main__':
 	main()
