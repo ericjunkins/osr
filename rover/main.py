@@ -23,13 +23,14 @@ def listener():
 
 def main():
 	listener()
+	c = 0
 	while True:
 		try:
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
 
 		except Exception as e:
-			print e
+			#print e
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)

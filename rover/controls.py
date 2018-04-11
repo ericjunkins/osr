@@ -4,8 +4,8 @@ import serial
 import math
 from roboclaw import Roboclaw
 import config
-
-
+import datetime
+import random
 
 d1,d2,d3,d4 = config.d1,config.d2,config.d3,config.d4  #Physical distances on Rover
 cals = config.cals                                     #Calibration constants
@@ -30,6 +30,7 @@ class Rover():
 		self.rc.ResetEncoders(self.address[0])
 		self.rc.ResetEncoders(self.address[1])
 		self.rc.ResetEncoders(self.address[2])
+		self.err =[None]*5
 
 	def getCornerDeg(self):
 		'''
@@ -225,26 +226,45 @@ class Rover():
 		return command[motorID](addr[motorID],speed)
 
 	def errorCheck(self):
-		for i in range(5):
-			err = self.rc.ReadError(self.address[i])
+		'''
+		Checks error status of each motor controller, returns 0 if any errors occur
+		'''
 
-		print err
+		for i in range(5):
+			self.err[i] = self.rc.ReadError(self.address[i])[1]
+		for error in self.err:
+			if error != 0:
+				return 0
+		return 1
+
+	def writeError(self):
+		'''
+		Writes the list of errors to a text file for later examination
+		'''
+
+		f = open('errorLog.txt','a')
+		errors = ','.join(str(e) for e in self.err)
+		f.write('\n' + 'Errors: ' + '[' + errors + ']' + ' at: ' + str(datetime.datetime.now()))
+		f.close()
 
 	def drive(self,v,r):
 		'''
-		Driving method for the Rover
+		Driving method for the Rover, rover will not do any commands if any motor controller
+		throws an error
 
 		:param int v: driving velocity command, % based from -100 (backward) to 100 (forward)
 		:param int r: driving turning radius command, % based from -100 (left) to 100 (right)
 
 		'''
-		current_radius = self.approxTurningRadius(self.getCornerDeg())
-		velocity = self.calVelocity(v, current_radius)
-		self.cornerPosControl(self.calTargetDeg(r))
-		self.errorCheck()
-		for i in range(6):
-			self.motorDuty(i+4,velocity[i])
+		if self.errorCheck():
+			current_radius = self.approxTurningRadius(self.getCornerDeg())
+			velocity = self.calVelocity(v, current_radius)
+			self.cornerPosControl(self.calTargetDeg(r))
 
+			for i in range(6):
+				self.motorDuty(i+4,velocity[i])
+		else:
+			self.writeError()
 
 	def killMotors(self):
 		'''
