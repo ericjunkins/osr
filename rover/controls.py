@@ -31,7 +31,6 @@ class Rover():
 		self.rc.ResetEncoders(self.address[1])
 		self.rc.ResetEncoders(self.address[2])
 
-
 	def getCornerDeg(self):
 		'''
 		Returns a list of angles [Deg] that each of the Corners are currently pointed at
@@ -101,6 +100,7 @@ class Rover():
 			return [ang2,-ang1,-ang4,ang3]
 		else:
 			return [-ang4,ang3,ang2,-ang1]
+
 	@staticmethod
 	def calVelocity(v,r):
 		'''
@@ -224,7 +224,11 @@ class Rover():
 		speed = abs(speed)
 		return command[motorID](addr[motorID],speed)
 
+	def errorCheck(self):
+		for i in range(5):
+			err = self.rc.ReadError(self.address[i])
 
+		print err
 
 	def drive(self,v,r):
 		'''
@@ -237,6 +241,7 @@ class Rover():
 		current_radius = self.approxTurningRadius(self.getCornerDeg())
 		velocity = self.calVelocity(v, current_radius)
 		self.cornerPosControl(self.calTargetDeg(r))
+		self.errorCheck()
 		for i in range(6):
 			self.motorDuty(i+4,velocity[i])
 
