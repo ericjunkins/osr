@@ -10,8 +10,6 @@ import random
 d1,d2,d3,d4 = config.d1,config.d2,config.d3,config.d4  #Physical distances on Rover
 cals = config.cals                                     #Calibration constants
 
-
-
 class Rover():
 	'''
 	Rover class contains all the math and motor control algorithms to move the rover

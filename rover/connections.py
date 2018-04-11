@@ -4,8 +4,6 @@ import time
 from bluetooth import *
 import xbox
 
-
-
 class Connections():
 	'''
 	Sets up all the connections for running the rover, from a bluetooth app, xbox controller, and a unix socket for
