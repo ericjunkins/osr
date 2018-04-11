@@ -86,21 +86,23 @@ class Rover():
 		if radius == 0:
 			r = 250
 		elif -100 <= radius <= 100:
-			r = 220 - abs(radius)*(250/100)
+			r = 220 - radius*(250/100)
 		else:
 			r = 250
+
 		if r == 250:
 			return [0]*4
 
-		ang1 = int(math.degrees(math.atan(d1/(abs(r)+d3))))
-		ang2 = int(math.degrees(math.atan(d2/(abs(r)+d3))))
-		ang3 = int(math.degrees(math.atan(d2/(abs(r)-d3))))
-		ang4 = int(math.degrees(math.atan(d1/(abs(r)-d3))))
+		ang1 = -int(math.degrees(math.atan(d1/(abs(r)+d3))))
+		ang2 =  int(math.degrees(math.atan(d2/(abs(r)+d3))))
+		ang3 =  int(math.degrees(math.atan(d2/(abs(r)-d3))))
+		ang4 = -int(math.degrees(math.atan(d1/(abs(r)-d3))))
 
-		if radius > 0:
-			return [ang2,-ang1,-ang4,ang3]
-		else:
-			return [-ang4,ang3,ang2,-ang1]
+		if r < 0:
+			
+		print [ang2,ang1,ang4,ang3]
+		return [ang2,ang1,ang4,ang3]
+
 	@staticmethod
 	def calVelocity(v,r):
 		'''
@@ -118,7 +120,7 @@ class Rover():
 		if (r == 0 or r >= 250 or r <= -250):
 				return [v] * 6                        # No turning radius, all wheels same speed
 		else:
-			x = v/(abs(r) + d4)                   # Wheels can't move faster than max (127)
+			x = speed/(abs(r) + d4)                   # Wheels can't move faster than max (127)
 			a = math.pow(d2,2)
 			b = math.pow(d3,2)
 			c = math.pow(abs(r) + d1,2)
@@ -130,7 +132,7 @@ class Rover():
 			v2 = int(x*e)                             # Slowest wheel
 			v3 = int(x*math.sqrt(a + d))
 			v4 = int(x*math.sqrt(a + c))
-			v5 = int(v)                           # Fastest wheel
+			v5 = int(speed)                           # Fastest wheel
 			v6 = int(x*math.sqrt(b + c))
 
 			if (r < 0):
@@ -163,19 +165,19 @@ class Rover():
 
 		speed, accel = 1000,2000            #These values could potentially need tuning still
 
-
+		'''
 		for i in range(4):
 			index = int(math.ceil((i+1)/2.0)+2)
                         if (i % 2):
 				self.rc.SpeedAccelDeccelPositionM2(self.address[index],accel,speed,accel,x[i],1)
                         else:
 				self.rc.SpeedAccelDeccelPositionM1(self.address[index],accel,speed,accel,x[i],1)
+		'''
 
-
-		#self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
-		#self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
-		#self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
-		#self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
+		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
+		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
+		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
+		self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
 
 	def motorDuty(self, motorID, speed):
 		'''

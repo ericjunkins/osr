@@ -28,7 +28,8 @@ def main():
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
 
-		except:
+		except Exception as e:
+			print e
 			rover.killMotors()
 			conn.closeConnections()
 			time.sleep(0.5)

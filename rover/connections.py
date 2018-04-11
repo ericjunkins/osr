@@ -1,7 +1,8 @@
 import socket
 import os
 import time
-
+from bluetooth import *
+import xbox
 
 
 
@@ -20,7 +21,6 @@ class Connections():
 		self.screen_sock = None
 
 	def _btConnect(self):
-		from bluetooth import *
 		'''
 		Initializes the server side for bluetooth communication, with a timeout of 1 second between data from the app
 		'''
@@ -44,7 +44,6 @@ class Connections():
 		self.bt_sock.settimeout(1)
 
 	def _xBoxConnect(self):
-		import xbox
 		'''
 		Initializes a listener for the Xbox controller
 		'''
