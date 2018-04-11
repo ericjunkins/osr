@@ -17,7 +17,7 @@ class Rover():
 	Rover class contains all the math and motor control algorithms to move the rover
 
 	In order to call command the rover the only method necessary is the drive() method
-	
+
 	'''
 	def __init__(self):
 		'''
@@ -39,14 +39,16 @@ class Rover():
 
 		encoders = [0]*4
 		for i in range(4):
+			index = int(math.ceil((i+1)/2.0)+2)
 			if (i % 2):
-				enc = self.rc.ReadEncM2(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
+				enc = self.rc.ReadEncM2(self.address[index])[1]
 			else:
-				enc = self.rc.ReadEncM1(self.address[int(math.ceil((i+1)/2.0)+2)])[1]
+				enc = self.rc.ReadEncM1(self.address[index])[1]
 			encoders[i] = int(cals[i][0] * math.pow(enc,2) + cals[i][1]*enc + cals[i][2])
 		return encoders
 
-	def getTurningRadius(self,enc):
+	@staticmethod
+	def getTurningRadius(enc):
 		'''
 		Takes the list of current corner angles and approximates the current turning radius [inches]
 
@@ -71,7 +73,8 @@ class Rover():
 		except:
 			return 250
 
-	def getTarAng(self,radius):
+	@staticmethod
+	def getTarAng(radius):
 		'''
 		Takes a turning radius and calculates what angle [degrees] each corner should be at
 
@@ -85,7 +88,7 @@ class Rover():
 		elif -100 <= radius <= 100:
 			r = 250 - radius*(220/100)
 		else:
-			r = 250	
+			r = 250
 
 		if (radius > 0):
 			ang1 = -int(math.degrees(math.atan(d1/(abs(r)+d3))))
@@ -102,18 +105,7 @@ class Rover():
 
 		return [ang2,ang1,ang4,ang3]
 
-	'''
-	def calculateDriveSpeed(self,v,cur_rad):
-		
-		
-		
-		v = int(v)*(127/100)
-		if (v == 0):
-			return [0]*6
-		else:
-			return  self.__getVelocity(cur_rad,v)
-	'''
-
+	@staticmethod
 	def getVelocity(v,r):
 		'''
 		Returns a list of speeds for each individual drive motor based on current turning radius
@@ -123,8 +115,6 @@ class Rover():
 
 		'''
 
-		if v > 100 or v < 100:
-			v = 0
 		v = int(v)*(127/100)
 		if (v == 0):
 			return [v]*6
@@ -156,7 +146,7 @@ class Rover():
 	def spinCorner(self, tar_enc):
 		'''
 		Takes the target angle and gets what encoder tick that value is for position control
-		
+
 		:param list [int] tar_enc: List of target angles in degrees for each corner
 		'''
 		x = [0]*4
@@ -173,14 +163,17 @@ class Rover():
 				if x1 > 0 and x2 <=0:
 					x[i] = int(x1)
 				else:
-					x[i] = int(x2)          #I don't think this case can ever happen. 
-		
+					x[i] = int(x2)          #I don't think this case can ever happen.
+
 		speed, accel = 1000,2000            #These values could potentially need tuning still
 
-		self.rc.SpeedAccelDeccelPositionM1(self.address[3],accel,speed,accel,x[0],1)
-		self.rc.SpeedAccelDeccelPositionM2(self.address[3],accel,speed,accel,x[1],1)
-		self.rc.SpeedAccelDeccelPositionM1(self.address[4],accel,speed,accel,x[2],1)
-		self.rc.SpeedAccelDeccelPositionM2(self.address[4],accel,speed,accel,x[3],1)
+
+		for i in range(4):
+			index = int(math.ceil((i+1)/2.0)+2)
+                        if (i % 2):
+				self.rc.SpeedAccelDeccelPositionM2(self.address[index],accel,speed,accel,x[i],1)
+                        else:
+				self.rc.SpeedAccelDeccelPositionM1(self.address[index],accel,speed,accel,x[i],1)
 
 
 	def spinMotor(self, motorID, speed):
@@ -234,7 +227,7 @@ class Rover():
 
 	def drive(self,v,r):
 		'''
-		Driving method for the Rover. 
+		Driving method for the Rover
 
 		:param int v: driving velocity command, % based from -100 (backward) to 100 (forward)
 		:param int r: driving turning radius command, % based from -100 (left) to 100 (right)
